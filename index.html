@@ -5,11 +5,7 @@
 <title>日商簿記3級 仕訳演習（左右3行）</title>
 
 <style>
-body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
-}
-
+body { font-family: system-ui, sans-serif; margin: 20px; }
 h1 { font-size: 22px; }
 h2 { margin-top: 30px; }
 
@@ -31,36 +27,15 @@ th, td {
   vertical-align: top;
 }
 
-th {
-  text-align: center;
-  font-size: 16px;
-}
-
-/* 色の思想：借方＝赤／貸方＝青 */
+th { text-align: center; font-size: 16px; }
 th.debit { background: #ffe5e5; color: #900; }
 th.credit { background: #e5f0ff; color: #004; }
 
-.row {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 6px;
-}
+.row { display: flex; gap: 6px; margin-bottom: 6px; }
+select { width: 130px; padding: 4px; }
+input { width: 90px; padding: 4px; text-align: right; }
 
-select {
-  width: 130px;
-  padding: 4px;
-}
-
-input {
-  width: 90px;
-  padding: 4px;
-  text-align: right;
-}
-
-.level {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+.level { font-weight: bold; margin-bottom: 5px; }
 </style>
 </head>
 
@@ -68,139 +43,63 @@ input {
 
 <h1>日商簿記3級 仕訳演習（左右プルダウン）</h1>
 
-<!-- ===== 易 ===== -->
 <h2>易（基本）</h2>
 
-<div class="question">
-  <div class="level">【易①】</div>
-  商品を現金で仕入れた（10,000円）。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【易②】</div>
-  商品を現金で販売した（12,000円）。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【易③】</div>
-  備品を現金で購入した（30,000円）。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【易④】</div>
-  売掛金20,000円を現金で回収した。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【易⑤】</div>
-  買掛金15,000円を現金で支払った。
-  ${ui()}
-</div>
-
-<!-- ===== 中 ===== -->
-<h2>中（判断が1つ増える）</h2>
-
-<div class="question">
-  <div class="level">【中①】</div>
-  商品を掛けで仕入れた（18,000円）。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【中②】</div>
-  商品を掛けで販売した（25,000円）。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【中③】</div>
-  売掛金30,000円のうち、10,000円を現金で回収した。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【中④】</div>
-  備品を購入し、代金40,000円のうち半分を現金で支払った。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【中⑤】</div>
-  商品を現金で仕入れ、代金の一部5,000円を掛けとした（合計20,000円）。
-  ${ui()}
-</div>
-
-<!-- ===== 難 ===== -->
-<h2>難（見た目で戸惑う）</h2>
-
-<div class="question">
-  <div class="level">【難①】</div>
-  売掛金50,000円のうち、30,000円を現金で回収し、残額は翌月回収予定とした。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【難②】</div>
-  商品を仕入れ、代金の一部を現金、残額を掛けとした（合計36,000円）。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【難③】</div>
-  備品を購入し、代金の一部を現金で支払い、残額を掛けとした。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【難④】</div>
-  買掛金40,000円のうち、25,000円を現金で支払った。
-  ${ui()}
-</div>
-
-<div class="question">
-  <div class="level">【難⑤】</div>
-  売掛金60,000円のうち、一部を現金で回収し、残額は翌月回収とした。
-  ${ui()}
-</div>
+<div id="questions"></div>
 
 <script>
-function ui() {
-  return `
-<table>
-<tr>
-  <th class="debit">借方</th>
-  <th class="credit">貸方</th>
-</tr>
-<tr>
-<td>
-  ${rows("debit")}
-</td>
-<td>
-  ${rows("credit")}
-</td>
-</tr>
-</table>`;
-}
+const problems = [
+  "商品を現金で仕入れた（10,000円）",
+  "商品を現金で販売した（12,000円）",
+  "備品を現金で購入した（30,000円）",
+  "売掛金20,000円を現金で回収した",
+  "買掛金15,000円を現金で支払った"
+];
 
-function rows(side) {
-  const accounts = `
-    <option value="">勘定科目</option>
-    <option>現金</option>
-    <option>売掛金</option>
-    <option>買掛金</option>
-    <option>仕入</option>
-    <option>売上</option>
-    <option>備品</option>`;
+const accounts = `
+<option value="">勘定科目</option>
+<option>現金</option>
+<option>売掛金</option>
+<option>買掛金</option>
+<option>仕入</option>
+<option>売上</option>
+<option>備品</option>
+`;
+
+function rows() {
   return `
   <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
   <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
   <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
   `;
 }
+
+function ui() {
+  return `
+  <table>
+    <tr>
+      <th class="debit">借方</th>
+      <th class="credit">貸方</th>
+    </tr>
+    <tr>
+      <td>${rows()}</td>
+      <td>${rows()}</td>
+    </tr>
+  </table>
+  `;
+}
+
+const container = document.getElementById("questions");
+
+problems.forEach((text, i) => {
+  container.insertAdjacentHTML("beforeend", `
+    <div class="question">
+      <div class="level">【易${i+1}】</div>
+      ${text}
+      ${ui()}
+    </div>
+  `);
+});
 </script>
 
 </body>
