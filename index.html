@@ -1,192 +1,207 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>仕訳模試（左右プルダウン）</title>
-  <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif; margin: 20px; line-height: 1.5; }
-    h1 { font-size: 20px; margin: 0 0 10px; }
-    .note { color: #555; font-size: 13px; margin-bottom: 16px; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 14px; margin: 12px 0; }
-    .qhead { display:flex; gap:10px; align-items: baseline; justify-content: space-between; }
-    .qno { font-weight: 700; }
-    .status { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid #ddd; }
-    .grid { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    .grid th, .grid td { border: 1px solid #ddd; padding: 10px; vertical-align: top; }
-    .grid th { background: #f7f7f7; text-align: left; }
-    .sideLabel { font-size: 12px; color:#666; margin-bottom: 6px; }
-    select, input[type="number"] { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc; font-size: 14px; }
-    .row2 { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-    .btns { display:flex; gap:10px; flex-wrap: wrap; margin-top: 14px; }
-    button { padding: 10px 14px; border-radius: 10px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
-    button.primary { border-color:#111; }
-    .result { margin-top: 14px; font-weight: 700; }
-    .small { font-size: 12px; color:#666; }
-    .ok { border-color: #3a3; background: #f3fff3; }
-    .ng { border-color: #c33; background: #fff3f3; }
-    @media (max-width: 720px) {
-      .grid th, .grid td { display:block; width: 100%; }
-      .grid tr { display:block; margin-bottom: 10px; }
-    }
-  </style>
+<meta charset="utf-8">
+<title>日商簿記3級 仕訳演習（左右3行）</title>
+
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  margin: 20px;
+}
+
+h1 { font-size: 22px; }
+h2 { margin-top: 30px; }
+
+.question {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 25px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  vertical-align: top;
+}
+
+th {
+  text-align: center;
+  font-size: 16px;
+}
+
+/* 色の思想：借方＝赤／貸方＝青 */
+th.debit { background: #ffe5e5; color: #900; }
+th.credit { background: #e5f0ff; color: #004; }
+
+.row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+select {
+  width: 130px;
+  padding: 4px;
+}
+
+input {
+  width: 90px;
+  padding: 4px;
+  text-align: right;
+}
+
+.level {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+</style>
 </head>
+
 <body>
-  <h1>仕訳模試（左右プルダウン）</h1>
-  <div class="note">
-    ・借方／貸方をプルダウンで選択 → 「採点」<br>
-    ・金額は任意（使う場合のみ）<br>
-    ・問題はこのHTML内の <span class="small">const questions = [...]</span> を編集して増やせます
-  </div>
 
-  <div class="btns">
-    <button class="primary" id="gradeBtn">採点</button>
-    <button id="resetBtn">リセット</button>
-    <button id="showAnsBtn">正答表示（先生用）</button>
-  </div>
+<h1>日商簿記3級 仕訳演習（左右プルダウン）</h1>
 
-  <div class="result" id="summary"></div>
+<!-- ===== 易 ===== -->
+<h2>易（基本）</h2>
 
-  <div id="quiz"></div>
+<div class="question">
+  <div class="level">【易①】</div>
+  商品を現金で仕入れた（10,000円）。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【易②】</div>
+  商品を現金で販売した（12,000円）。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【易③】</div>
+  備品を現金で購入した（30,000円）。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【易④】</div>
+  売掛金20,000円を現金で回収した。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【易⑤】</div>
+  買掛金15,000円を現金で支払った。
+  ${ui()}
+</div>
+
+<!-- ===== 中 ===== -->
+<h2>中（判断が1つ増える）</h2>
+
+<div class="question">
+  <div class="level">【中①】</div>
+  商品を掛けで仕入れた（18,000円）。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【中②】</div>
+  商品を掛けで販売した（25,000円）。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【中③】</div>
+  売掛金30,000円のうち、10,000円を現金で回収した。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【中④】</div>
+  備品を購入し、代金40,000円のうち半分を現金で支払った。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【中⑤】</div>
+  商品を現金で仕入れ、代金の一部5,000円を掛けとした（合計20,000円）。
+  ${ui()}
+</div>
+
+<!-- ===== 難 ===== -->
+<h2>難（見た目で戸惑う）</h2>
+
+<div class="question">
+  <div class="level">【難①】</div>
+  売掛金50,000円のうち、30,000円を現金で回収し、残額は翌月回収予定とした。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【難②】</div>
+  商品を仕入れ、代金の一部を現金、残額を掛けとした（合計36,000円）。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【難③】</div>
+  備品を購入し、代金の一部を現金で支払い、残額を掛けとした。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【難④】</div>
+  買掛金40,000円のうち、25,000円を現金で支払った。
+  ${ui()}
+</div>
+
+<div class="question">
+  <div class="level">【難⑤】</div>
+  売掛金60,000円のうち、一部を現金で回収し、残額は翌月回収とした。
+  ${ui()}
+</div>
 
 <script>
-/** ========= ここを編集：勘定科目の候補 ========= **/
-const accounts = [
-  "現金","当座預金","普通預金","売掛金","買掛金","受取手形","支払手形",
-  "仕入","売上","備品","建物","消耗品費","通信費","旅費交通費",
-  "未払金","未払費用","前払費用","前受金","仮払金","仮受金",
-  "貸倒引当金","減価償却費","租税公課","支払利息"
-];
-
-/** ========= ここを編集：問題データ（増やしてOK） =========
- *  - debit/credit: 正答の勘定科目（accountsに含まれる文字列）
- *  - amount: 正答金額（使わないなら null）
- **/
-const questions = [
-  {
-    text: "商品を掛けで仕入れた（100,000円）。",
-    debit: "仕入",
-    credit: "買掛金",
-    amount: 100000
-  },
-  {
-    text: "売掛金80,000円を現金で回収した。",
-    debit: "現金",
-    credit: "売掛金",
-    amount: 80000
-  },
-  {
-    text: "備品を現金で購入した（30,000円）。",
-    debit: "備品",
-    credit: "現金",
-    amount: 30000
-  }
-];
-
-const quizEl = document.getElementById("quiz");
-const summaryEl = document.getElementById("summary");
-let showAnswers = false;
-
-function optionHTML(list, selected="") {
-  return ['<option value="">（選択）</option>']
-    .concat(list.map(a => `<option value="${a}" ${a===selected?"selected":""}>${a}</option>`))
-    .join("");
+function ui() {
+  return `
+<table>
+<tr>
+  <th class="debit">借方</th>
+  <th class="credit">貸方</th>
+</tr>
+<tr>
+<td>
+  ${rows("debit")}
+</td>
+<td>
+  ${rows("credit")}
+</td>
+</tr>
+</table>`;
 }
 
-function render() {
-  quizEl.innerHTML = "";
-  questions.forEach((q, i) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="qhead">
-        <div class="qno">第${i+1}問</div>
-        <div class="status" id="status-${i}">未採点</div>
-      </div>
-      <div>${q.text}</div>
-
-      <table class="grid" aria-label="仕訳テーブル">
-        <tr>
-          <th>借方</th>
-          <th>貸方</th>
-        </tr>
-        <tr>
-          <td>
-            <div class="sideLabel">勘定科目</div>
-            <select id="debit-${i}">
-              ${optionHTML(accounts)}
-            </select>
-          </td>
-          <td>
-            <div class="sideLabel">勘定科目</div>
-            <select id="credit-${i}">
-              ${optionHTML(accounts)}
-            </select>
-          </td>
-        </tr>
-      </table>
-
-      <div class="row2">
-        <div>
-          <div class="sideLabel">金額（任意）</div>
-          <input type="number" id="amount-${i}" inputmode="numeric" placeholder="${q.amount ?? "（金額指定なし）"}" />
-          <div class="small">※ 金額を採点したくない問題は、正答側を null にしてください。</div>
-        </div>
-        <div>
-          <div class="sideLabel">正答（表示モード）</div>
-          <div class="small" id="ans-${i}">${showAnswers ? `借：${q.debit} ／ 貸：${q.credit}${q.amount!=null?` ／ 金額：${q.amount.toLocaleString()}円`:""}` : "（非表示）"}</div>
-        </div>
-      </div>
-    `;
-    quizEl.appendChild(card);
-  });
+function rows(side) {
+  const accounts = `
+    <option value="">勘定科目</option>
+    <option>現金</option>
+    <option>売掛金</option>
+    <option>買掛金</option>
+    <option>仕入</option>
+    <option>売上</option>
+    <option>備品</option>`;
+  return `
+  <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
+  <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
+  <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
+  `;
 }
-
-function grade() {
-  let correct = 0;
-  questions.forEach((q, i) => {
-    const debit = document.getElementById(`debit-${i}`).value;
-    const credit = document.getElementById(`credit-${i}`).value;
-    const amountStr = document.getElementById(`amount-${i}`).value;
-    const amount = amountStr === "" ? null : Number(amountStr);
-
-    const okDebit = (debit === q.debit);
-    const okCredit = (credit === q.credit);
-    const okAmount = (q.amount === null) ? true : (amount === q.amount);
-
-    const isOK = okDebit && okCredit && okAmount;
-
-    const status = document.getElementById(`status-${i}`);
-    status.textContent = isOK ? "正解" : "不正解";
-    status.classList.remove("ok","ng");
-    status.classList.add(isOK ? "ok" : "ng");
-
-    if (isOK) correct++;
-  });
-
-  summaryEl.textContent = `得点：${correct} / ${questions.length}`;
-}
-
-function resetAll() {
-  questions.forEach((q, i) => {
-    document.getElementById(`debit-${i}`).value = "";
-    document.getElementById(`credit-${i}`).value = "";
-    document.getElementById(`amount-${i}`).value = "";
-    const status = document.getElementById(`status-${i}`);
-    status.textContent = "未採点";
-    status.classList.remove("ok","ng");
-  });
-  summaryEl.textContent = "";
-}
-
-document.getElementById("gradeBtn").addEventListener("click", grade);
-document.getElementById("resetBtn").addEventListener("click", resetAll);
-document.getElementById("showAnsBtn").addEventListener("click", () => {
-  showAnswers = !showAnswers;
-  render();
-});
-
-render();
 </script>
+
 </body>
 </html>
