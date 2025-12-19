@@ -2,105 +2,121 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>日商簿記3級 仕訳演習（左右3行）</title>
 
 <style>
-body { font-family: system-ui, sans-serif; margin: 20px; }
-h1 { font-size: 22px; }
-h2 { margin-top: 30px; }
+  body { font-family: system-ui, sans-serif; margin: 20px; }
+  h1 { font-size: 22px; margin-bottom: 6px; }
+  .sub { color:#555; margin-bottom: 14px; }
 
-.question {
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-bottom: 25px;
-}
+  .toolbar{
+    display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    margin: 10px 0 18px;
+  }
+  button{
+    padding: 8px 12px; font-size: 14px; cursor: pointer;
+    border: 1px solid #999; background: #fff; border-radius: 6px;
+  }
+  button:hover{ background:#f7f7f7; }
+  .score { font-weight: 700; }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
+  h2 { margin-top: 26px; }
 
-th, td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  vertical-align: top;
-}
+  .question {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .qhead{
+    display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+    margin-bottom: 6px;
+  }
+  .level { font-weight: 800; }
+  .status{
+    font-weight: 800;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1px solid #bbb;
+    white-space:nowrap;
+  }
+  .status.na { color:#666; background:#fafafa; }
+  .status.ok { color:#0a5; background:#eefbf4; border-color:#9ddfbf; }
+  .status.ng { color:#b00; background:#fff1f1; border-color:#f0b3b3; }
 
-th { text-align: center; font-size: 16px; }
-th.debit { background: #ffe5e5; color: #900; }
-th.credit { background: #e5f0ff; color: #004; }
+  table { width:100%; border-collapse: collapse; margin-top: 10px; }
+  th, td { border:1px solid #ccc; padding:8px; vertical-align: top; }
+  th { text-align:center; font-size:15px; }
+  th.debit { background:#ffe5e5; color:#900; }
+  th.credit{ background:#e5f0ff; color:#004; }
 
-.row { display: flex; gap: 6px; margin-bottom: 6px; }
-select { width: 130px; padding: 4px; }
-input { width: 90px; padding: 4px; text-align: right; }
+  .row{ display:flex; gap:8px; margin-bottom: 8px; }
+  select{
+    width: 140px; padding: 6px;
+    border:1px solid #bbb; border-radius: 6px; background:#fff;
+  }
+  input.amount{
+    width: 110px; padding: 6px; text-align:right;
+    border:1px solid #bbb; border-radius: 6px;
+  }
 
-.level { font-weight: bold; margin-bottom: 5px; }
+  /* 数字入力：上下ボタンを消す */
+  input.amount::-webkit-outer-spin-button,
+  input.amount::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input.amount { -moz-appearance: textfield; }
+
+  .row.invalid select, .row.invalid input { outline: 2px solid #f1a5a5; }
+  .row.valid select, .row.valid input { outline: 2px solid #a9e2c2; }
+
+  details.explain { margin-top: 10px; }
+  details.explain summary{ cursor:pointer; font-weight:700; }
+  .exbox{
+    margin-top: 8px;
+    padding: 10px;
+    border: 1px dashed #bbb;
+    border-radius: 10px;
+    background:#fafafa;
+    line-height: 1.55;
+  }
+  .ansline{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .note { color:#555; font-size: 13px; margin-top: 14px; }
 </style>
 </head>
 
 <body>
+<h1>日商簿記3級 仕訳演習（左右プルダウン・3行）</h1>
+<div class="sub">借方＝赤／貸方＝青。行の順番は問いません。空欄行は無視します。</div>
 
-<h1>日商簿記3級 仕訳演習（左右プルダウン）</h1>
+<div class="toolbar">
+  <button id="checkBtnTop">採点する（正解／不正解）</button>
+  <button id="resetBtnTop">入力をリセット</button>
+  <div class="score" id="scoreTop"></div>
+</div>
 
-<h2>易（基本）</h2>
+<div id="app"></div>
 
-<div id="questions"></div>
+<div class="toolbar">
+  <button id="checkBtnBottom">採点する（正解／不正解）</button>
+  <button id="resetBtnBottom">入力をリセット</button>
+  <div class="score" id="scoreBottom"></div>
+</div>
+
+<div class="note">
+  ※ 金額欄はキーボード入力前提です（上下スピン・ホイール誤操作を抑制）。<br>
+  ※ 「採点する」を押すと、各問の下に解説と正答例が表示されます。
+</div>
 
 <script>
+/** ===== 設定 ===== */
+const ACCOUNT_OPTIONS = ["現金","売掛金","買掛金","仕入","売上","備品"]; // 6つ（左右共通）
+const MAX_ROWS = 3;
+
+/** ===== 問題データ：易5・中5・難5（計15） ===== */
 const problems = [
-  "商品を現金で仕入れた（10,000円）",
-  "商品を現金で販売した（12,000円）",
-  "備品を現金で購入した（30,000円）",
-  "売掛金20,000円を現金で回収した",
-  "買掛金15,000円を現金で支払った"
-];
-
-const accounts = `
-<option value="">勘定科目</option>
-<option>現金</option>
-<option>売掛金</option>
-<option>買掛金</option>
-<option>仕入</option>
-<option>売上</option>
-<option>備品</option>
-`;
-
-function rows() {
-  return `
-  <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
-  <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
-  <div class="row"><select>${accounts}</select><input type="number" placeholder="金額"></div>
-  `;
-}
-
-function ui() {
-  return `
-  <table>
-    <tr>
-      <th class="debit">借方</th>
-      <th class="credit">貸方</th>
-    </tr>
-    <tr>
-      <td>${rows()}</td>
-      <td>${rows()}</td>
-    </tr>
-  </table>
-  `;
-}
-
-const container = document.getElementById("questions");
-
-problems.forEach((text, i) => {
-  container.insertAdjacentHTML("beforeend", `
-    <div class="question">
-      <div class="level">【易${i+1}】</div>
-      ${text}
-      ${ui()}
-    </div>
-  `);
-});
-</script>
-
-</body>
-</html>
+  // 易
+  { level:"易", no:1, text:"商品を現金で仕入れた（10,000円）。",
+    answer:{ debit:[["仕入",10000]], credit:[["現金",10000]] },
+    explain:"仕入は費用（借方）。現金が減るので貸方＝現金。"
+  },
+  { leve
