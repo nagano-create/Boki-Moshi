@@ -1,413 +1,405 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>日商簿記3級 仕訳演習（左右3行）</title>
-
-<style>
-  body { font-family: system-ui, sans-serif; margin: 20px; }
-  h1 { font-size: 22px; margin-bottom: 6px; }
-  .sub { color:#555; margin-bottom: 14px; }
-
-  .toolbar{
-    display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-    margin: 10px 0 18px;
-  }
-  button{
-    padding: 8px 12px; font-size: 14px; cursor: pointer;
-    border: 1px solid #999; background: #fff; border-radius: 6px;
-  }
-  button:hover{ background:#f7f7f7; }
-  .score { font-weight: 700; }
-
-  h2 { margin-top: 26px; }
-
-  .question {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 16px;
-  }
-  .qhead{
-    display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
-    margin-bottom: 6px;
-  }
-  .level { font-weight: 800; }
-  .status{
-    font-weight: 800;
-    padding: 2px 10px;
-    border-radius: 999px;
-    border: 1px solid #bbb;
-    white-space:nowrap;
-  }
-  .status.na { color:#666; background:#fafafa; }
-  .status.ok { color:#0a5; background:#eefbf4; border-color:#9ddfbf; }
-  .status.ng { color:#b00; background:#fff1f1; border-color:#f0b3b3; }
-
-  table { width:100%; border-collapse: collapse; margin-top: 10px; }
-  th, td { border:1px solid #ccc; padding:8px; vertical-align: top; }
-  th { text-align:center; font-size:15px; }
-  th.debit { background:#ffe5e5; color:#900; }
-  th.credit{ background:#e5f0ff; color:#004; }
-
-  .row{ display:flex; gap:8px; margin-bottom: 8px; }
-  select{
-    width: 140px; padding: 6px;
-    border:1px solid #bbb; border-radius: 6px; background:#fff;
-  }
-  input.amount{
-    width: 110px; padding: 6px; text-align:right;
-    border:1px solid #bbb; border-radius: 6px;
-  }
-
-  /* 数字入力：上下ボタンを消す */
-  input.amount::-webkit-outer-spin-button,
-  input.amount::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-  input.amount { -moz-appearance: textfield; }
-
-  .row.invalid select, .row.invalid input { outline: 2px solid #f1a5a5; }
-  .row.valid select, .row.valid input { outline: 2px solid #a9e2c2; }
-
-  details.explain { margin-top: 10px; }
-  details.explain summary{ cursor:pointer; font-weight:700; }
-  .exbox{
-    margin-top: 8px;
-    padding: 10px;
-    border: 1px dashed #bbb;
-    border-radius: 10px;
-    background:#fafafa;
-    line-height: 1.55;
-  }
-  .ansline{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-  .note { color:#555; font-size: 13px; margin-top: 14px; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>日商簿記3級 第1問（仕訳）Aセット</title>
+  <style>
+    :root{
+      --bd:#ddd; --mut:#666; --ok:#1a7f37; --ng:#b42318;
+      --bg:#fafafa; --card:#fff;
+    }
+    body{font-family:system-ui,-apple-system,"Segoe UI","Hiragino Kaku Gothic ProN","Meiryo",sans-serif; margin:18px; background:var(--bg);}
+    h1{font-size:20px; margin:0 0 6px;}
+    .sub{color:var(--mut); margin-bottom:14px; font-size:13px;}
+    .toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:10px 0 14px;}
+    button{
+      padding:8px 12px; border:1px solid #999; background:#fff; border-radius:8px;
+      cursor:pointer; font-size:14px;
+    }
+    button:hover{background:#f5f5f5;}
+    .score{font-weight:700;}
+    .wrap{max-width:1100px;}
+    .q{
+      background:var(--card); border:1px solid var(--bd); border-radius:14px;
+      padding:14px; margin:12px 0;
+    }
+    .qhead{display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:10px;}
+    .qid{font-weight:800;}
+    .diff{font-size:12px; color:#111; border:1px solid var(--bd); padding:2px 8px; border-radius:999px; background:#fff;}
+    .qtext{margin:8px 0 12px; line-height:1.5;}
+    .grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    }
+    .side{
+      border:1px dashed var(--bd); border-radius:12px; padding:10px;
+    }
+    .side h3{margin:0 0 8px; font-size:14px;}
+    .rows{display:flex; flex-direction:column; gap:8px;}
+    .row{display:grid; grid-template-columns:1fr 140px; gap:8px; align-items:center;}
+    select,input{
+      padding:8px 10px; border:1px solid var(--bd); border-radius:10px; font-size:14px; background:#fff;
+    }
+    input{ text-align:right; }
+    .hint{font-size:12px; color:var(--mut); margin-top:8px;}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; align-items:center;}
+    .result{font-weight:700;}
+    .ok{color:var(--ok);}
+    .ng{color:var(--ng);}
+    details{margin-top:10px;}
+    summary{cursor:pointer; color:#111; font-weight:700;}
+    .exp{margin-top:8px; color:#111; line-height:1.6;}
+    .ansbox{margin-top:8px; font-size:13px; color:#111;}
+    .ansbox code{background:#f2f2f2; padding:2px 6px; border-radius:6px;}
+    .small{font-size:12px; color:var(--mut);}
+  </style>
 </head>
-
 <body>
-<h1>日商簿記3級 仕訳演習（左右プルダウン・3行）</h1>
-<div class="sub">借方＝赤／貸方＝青。行の順番は問いません。空欄行は無視します。</div>
+<div class="wrap">
+  <h1>日商簿記3級 第1問（仕訳）Aセット（15問）</h1>
+  <div class="sub">
+    学習モード（デフォルト）：左右それぞれ「勘定科目＋金額」最大3行。<br/>
+    行順は不問（組み合わせ一致）。金額は入力すると3桁カンマが自動で入ります。
+  </div>
 
-<div class="toolbar">
-  <button id="checkBtnTop">採点する（正解／不正解）</button>
-  <button id="resetBtnTop">入力をリセット</button>
-  <div class="score" id="scoreTop"></div>
-</div>
+  <div class="toolbar">
+    <button id="gradeAllBtn">15問まとめて採点</button>
+    <span class="score">得点：<span id="score">-</span> / 15</span>
+    <span class="small">※Pagesが更新されない時は Ctrl+F5 またはシークレットで確認</span>
+  </div>
 
-<div id="app"></div>
-
-<div class="toolbar">
-  <button id="checkBtnBottom">採点する（正解／不正解）</button>
-  <button id="resetBtnBottom">入力をリセット</button>
-  <div class="score" id="scoreBottom"></div>
-</div>
-
-<div class="note">
-  ※ 金額欄はキーボード入力前提です（上下スピン・ホイール誤操作を抑制）。<br>
-  ※ 「採点する」を押すと、各問の下に解説と正答例が表示されます。
+  <div id="app"></div>
 </div>
 
 <script>
-/** ===== 設定 ===== */
-const ACCOUNT_OPTIONS = ["現金","売掛金","買掛金","仕入","売上","備品"]; // 6つ（左右共通）
-const MAX_ROWS = 3;
-
-/** ===== 問題データ：易5・中5・難5（計15） ===== */
-const problems = [
-  // 易
-  { level:"易", no:1, text:"商品を現金で仕入れた（10,000円）。",
-    answer:{ debit:[["仕入",10000]], credit:[["現金",10000]] },
-    explain:"仕入は費用（借方）。現金が減るので貸方＝現金。"
+/** =========================
+ *  Aセット（15問）
+ *  - 各問 choices: 6個（左右共通）
+ *  - 先頭に空欄を自動追加（—）
+ *  - answer: debit/credit は「勘定科目×金額」配列
+ * ========================= **/
+const SET_A = [
+  {id:1, diff:"易", q:"現金40,000円で商品を仕入れた。",
+   choices:["現金","仕入","商品","売上","買掛金","未払金"],
+   ans:{debit:[["仕入",40000]], credit:[["現金",40000]]},
+   exp:"商品を仕入れたので左は仕入。現に金があるので右は現金。"
   },
-  { level:"易", no:2, text:"商品を現金で販売した（12,000円）。",
-    answer:{ debit:[["現金",12000]], credit:[["売上",12000]] },
-    explain:"現金が増えるので借方＝現金。売上は収益なので貸方＝売上。"
+  {id:2, diff:"易", q:"商品50,000円を掛けで販売した。",
+   choices:["売上","現金","売掛金","仕入","前受金","買掛金"],
+   ans:{debit:[["売掛金",50000]], credit:[["売上",50000]]},
+   exp:"現に金がない→売掛金。稼いだ記録は売上（右）。"
   },
-  { level:"易", no:3, text:"備品を現金で購入した（30,000円）。",
-    answer:{ debit:[["備品",30000]], credit:[["現金",30000]] },
-    explain:"備品は資産の増加（借方）。現金が減るので貸方＝現金。"
+  {id:3, diff:"易", q:"現金30,000円を借り入れた。",
+   choices:["現金","借入金","元入金","受取利息","支払利息","雑収入"],
+   ans:{debit:[["現金",30000]], credit:[["借入金",30000]]},
+   exp:"現金が増えた。借金も増えたので右は借入金。"
   },
-  { level:"易", no:4, text:"売掛金20,000円を現金で回収した。",
-    answer:{ debit:[["現金",20000]], credit:[["売掛金",20000]] },
-    explain:"現金が増える（借方）。売掛金は減るので貸方＝売掛金。"
+  {id:4, diff:"易", q:"事務用品10,000円を後払いで購入した。",
+   choices:["消耗品費","現金","未払金","買掛金","備品","雑費"],
+   ans:{debit:[["消耗品費",10000]], credit:[["未払金",10000]]},
+   exp:"事務用品は費用。現に金がない→未払金。"
   },
-  { level:"易", no:5, text:"買掛金15,000円を現金で支払った。",
-    answer:{ debit:[["買掛金",15000]], credit:[["現金",15000]] },
-    explain:"買掛金（負債）が減る→借方。現金が減る→貸方。"
-  },
-
-  // 中
-  { level:"中", no:1, text:"商品を掛けで仕入れた（18,000円）。",
-    answer:{ debit:[["仕入",18000]], credit:[["買掛金",18000]] },
-    explain:"仕入（借方）と、後払い＝買掛金（貸方）。"
-  },
-  { level:"中", no:2, text:"商品を掛けで販売した（25,000円）。",
-    answer:{ debit:[["売掛金",25000]], credit:[["売上",25000]] },
-    explain:"後日回収＝売掛金（借方）。売上は収益なので貸方。"
-  },
-  { level:"中", no:3, text:"売掛金30,000円のうち、10,000円を現金で回収した。",
-    answer:{ debit:[["現金",10000]], credit:[["売掛金",10000]] },
-    explain:"回収した分だけ仕訳。残り20,000円はそのまま売掛金として残る。"
-  },
-  { level:"中", no:4, text:"備品を購入し、代金40,000円のうち半分を現金で支払った。",
-    answer:{ debit:[["備品",40000]], credit:[["現金",20000],["買掛金",20000]] },
-    explain:"備品は全額増加（借方40,000）。支払いは現金20,000、残りは買掛金。"
-  },
-  { level:"中", no:5, text:"商品を仕入れ、代金20,000円のうち5,000円を現金で支払い、残りは掛けとした。",
-    answer:{ debit:[["仕入",20000]], credit:[["現金",5000],["買掛金",15000]] },
-    explain:"仕入は全額（借方20,000）。支払った現金と、残りの買掛金に分解。"
+  {id:5, diff:"易", q:"売掛金20,000円を現金で回収した。",
+   choices:["現金","売掛金","売上","雑収入","前受金","未収金"],
+   ans:{debit:[["現金",20000]], credit:[["売掛金",20000]]},
+   exp:"後でもらう現金（売掛金）が、現金になっただけ。"
   },
 
-  // 難（見た目で戸惑うが論点は限定）
-  { level:"難", no:1, text:"商品を掛けで販売した60,000円のうち、30,000円をただちに現金で受け取った（残額は後日回収）。",
-    answer:{ debit:[["現金",30000],["売掛金",30000]], credit:[["売上",60000]] },
-    explain:"売上は全額60,000（貸方）。受け取った分は現金、未回収分は売掛金（借方で合計60,000）。"
+  {id:6, diff:"中", q:"商品80,000円を仕入れ、代金のうち50,000円を現金で支払い、残りは掛けとした。",
+   choices:["仕入","現金","買掛金","未払金","商品","前払金"],
+   ans:{debit:[["仕入",80000]], credit:[["現金",50000],["買掛金",30000]]},
+   exp:"商品なので仕入。現に金がない分は掛（買掛金）。"
   },
-  { level:"難", no:2, text:"備品を90,000円で購入し、30,000円を現金で支払い、残額は掛けとした。",
-    answer:{ debit:[["備品",90000]], credit:[["現金",30000],["買掛金",60000]] },
-    explain:"備品は全額増（借方90,000）。支払いは現金＋買掛金に分解。"
+  {id:7, diff:"中", q:"家賃12,000円を後払いとした。",
+   choices:["支払家賃","未払金","現金","前払費用","雑費","買掛金"],
+   ans:{debit:[["支払家賃",12000]], credit:[["未払金",12000]]},
+   exp:"家賃は費用。現に金がない→未払金。"
   },
-  { level:"難", no:3, text:"商品を36,000円で仕入れ、16,000円を現金で支払い、残額は掛けとした。",
-    answer:{ debit:[["仕入",36000]], credit:[["現金",16000],["買掛金",20000]] },
-    explain:"仕入は全額（借方36,000）。支払いは現金と買掛金に分ける。"
+  {id:8, diff:"中", q:"現金過不足が5,000円の不足であることが判明した。",
+   choices:["現金","現金過不足","雑損","雑収入","売上","仕入"],
+   ans:{debit:[["現金過不足",5000]], credit:[["現金",5000]]},
+   exp:"現金が足りない→現金は右。原因不明の箱＝現金過不足。"
   },
-  { level:"難", no:4, text:"買掛金40,000円のうち、25,000円を現金で支払った（残額は未払）。",
-    answer:{ debit:[["買掛金",25000]], credit:[["現金",25000]] },
-    explain:"支払った分だけ仕訳。買掛金が25,000減少（借方）、現金が25,000減少（貸方）。"
+  {id:9, diff:"中", q:"借入金30,000円を現金で返済した。",
+   choices:["借入金","現金","支払利息","元入金","雑費","未払金"],
+   ans:{debit:[["借入金",30000]], credit:[["現金",30000]]},
+   exp:"借金を減らしたので左は借入金。現金は出ていく。"
   },
-  { level:"難", no:5, text:"売掛金60,000円のうち、45,000円を現金で回収した（残額は後日回収）。",
-    answer:{ debit:[["現金",45000]], credit:[["売掛金",45000]] },
-    explain:"回収した分のみ仕訳。残額は売掛金として残る。"
+  {id:10, diff:"中", q:"商品30,000円を販売し、代金は後日受け取ることとした。",
+   choices:["売掛金","売上","現金","未収金","前受金","仕入"],
+   ans:{debit:[["売掛金",30000]], credit:[["売上",30000]]},
+   exp:"販売したら売上。現に金がない→売掛金。"
+  },
+
+  {id:11, diff:"難", q:"売掛金15,000円が回収不能となった。",
+   choices:["貸倒損失","売掛金","現金","雑損","売上","現金過不足"],
+   ans:{debit:[["貸倒損失",15000]], credit:[["売掛金",15000]]},
+   exp:"取れないお金は損。損は左。売掛金（資産）を消すので右。"
+  },
+  {id:12, diff:"難", q:"備品40,000円を購入し、代金のうち20,000円を現金で支払い、残りは後払いとした。",
+   choices:["備品","現金","未払金","買掛金","消耗品費","雑費"],
+   ans:{debit:[["備品",40000]], credit:[["現金",20000],["未払金",20000]]},
+   exp:"備品は資産（左）。後払いは未払金（※買掛金ではない）。"
+  },
+  {id:13, diff:"難", q:"現金過不足5,000円について、原因が雑収入であることが判明した。",
+   choices:["現金過不足","雑収入","現金","雑損","売上","仕入"],
+   ans:{debit:[["現金過不足",5000]], credit:[["雑収入",5000]]},
+   exp:"原因が益（雑収入）と判明→益は右。現金過不足（左）を消す。"
+  },
+  {id:14, diff:"難", q:"受取手形20,000円を現金で回収した。",
+   choices:["現金","受取手形","売掛金","売上","雑収入","未収金"],
+   ans:{debit:[["現金",20000]], credit:[["受取手形",20000]]},
+   exp:"受取手形（後でもらう現金）が現金になった。"
+  },
+  {id:15, diff:"難", q:"広告費18,000円を現金で支払った。",
+   choices:["広告宣伝費","現金","未払金","前払費用","雑費","仕入"],
+   ans:{debit:[["広告宣伝費",18000]], credit:[["現金",18000]]},
+   exp:"サービスは仕入にならない。費用は左。"
   },
 ];
 
-/** ===== HTML生成 ===== */
-function optionHTML(){
-  // 先頭はブランク（本番CBTっぽく）
-  const opts = ['<option value=""></option>']
-    .concat(ACCOUNT_OPTIONS.map(a => `<option value="${a}">${a}</option>`));
-  return opts.join("");
-}
+/** ---------- utilities ---------- **/
+const BLANK = "—（未選択）";
+const normAccount = s => (s || "").trim();
+const parseAmount = (s) => {
+  if (!s) return null;
+  const t = String(s).replace(/,/g,"").replace(/[０-９]/g, d => "０１２３４５６７８９".indexOf(d));
+  const n = Number(t);
+  if (!Number.isFinite(n)) return null;
+  if (n <= 0) return null;
+  return Math.round(n);
+};
+const fmtComma = (n) => {
+  if (n === null || n === undefined) return "";
+  const s = String(n);
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+const keyPair = (acc, amt) => `${acc}__${amt}`;
 
-function rowsHTML(qid, side){
-  let html = "";
-  for(let i=0;i<MAX_ROWS;i++){
-    html += `
-      <div class="row" data-row="${i}">
-        <select data-qid="${qid}" data-side="${side}" data-kind="account">
-          ${optionHTML()}
-        </select>
-        <input class="amount" type="number" inputmode="numeric"
-               data-qid="${qid}" data-side="${side}" data-kind="amount"
-               placeholder="">
-      </div>
-    `;
+/** multiset compare (order-insensitive, duplicates allowed) */
+const multisetEqual = (aKeys, bKeys) => {
+  if (aKeys.length !== bKeys.length) return false;
+  const m = new Map();
+  for (const k of aKeys) m.set(k, (m.get(k)||0)+1);
+  for (const k of bKeys) {
+    const v = m.get(k)||0;
+    if (v === 0) return false;
+    if (v === 1) m.delete(k); else m.set(k, v-1);
   }
-  return html;
+  return m.size === 0;
+};
+
+function buildRowSelect(options){
+  const sel = document.createElement("select");
+  for(const opt of options){
+    const o = document.createElement("option");
+    o.value = opt;
+    o.textContent = opt;
+    sel.appendChild(o);
+  }
+  return sel;
 }
 
-function uiHTML(qid){
-  return `
-    <table>
-      <tr>
-        <th class="debit">借方</th>
-        <th class="credit">貸方</th>
-      </tr>
-      <tr>
-        <td>${rowsHTML(qid,"debit")}</td>
-        <td>${rowsHTML(qid,"credit")}</td>
-      </tr>
-    </table>
-  `;
+function buildAmountInput(){
+  const inp = document.createElement("input");
+  inp.type = "text";
+  inp.inputMode = "numeric";
+  inp.placeholder = "金額";
+  inp.addEventListener("input", () => {
+    const raw = inp.value;
+    const n = parseAmount(raw);
+    if (n === null){
+      // allow partial typing; just strip non-digits/commas
+      const cleaned = raw.replace(/[^\d,０-９]/g,"");
+      if (cleaned !== raw) inp.value = cleaned;
+      return;
+    }
+    inp.value = fmtComma(n);
+  });
+  return inp;
 }
+
+function collectSide(rowsEl){
+  // returns array of [account, amount] (excluding blank/unselected rows)
+  const out = [];
+  rowsEl.querySelectorAll(".row").forEach(row => {
+    const sel = row.querySelector("select");
+    const inp = row.querySelector("input");
+    const acc = normAccount(sel.value);
+    const amt = parseAmount(inp.value);
+    if (acc && acc !== BLANK){
+      if (amt !== null) out.push([acc, amt]);
+      else out.push([acc, null]); // incomplete
+    } else {
+      // if blank selected but amount typed, ignore amount
+    }
+  });
+  return out;
+}
+
+function gradeQuestion(q, card){
+  const debitRows = card.querySelector(".debitRows");
+  const creditRows = card.querySelector(".creditRows");
+
+  const userD = collectSide(debitRows);
+  const userC = collectSide(creditRows);
+
+  // If any selected account has null amount -> incomplete
+  const incomplete = [...userD, ...userC].some(([a,amt]) => a && a !== BLANK && (amt === null));
+  if (incomplete){
+    return {ok:false, status:"未入力（選択した科目の金額が空）"};
+  }
+
+  // Build keys (ignore blank rows)
+  const userDKeys = userD.filter(([a,amt]) => a && a!==BLANK).map(([a,amt]) => keyPair(a, amt));
+  const userCKeys = userC.filter(([a,amt]) => a && a!==BLANK).map(([a,amt]) => keyPair(a, amt));
+
+  const ansDKeys = q.ans.debit.map(([a,amt]) => keyPair(a, amt));
+  const ansCKeys = q.ans.credit.map(([a,amt]) => keyPair(a, amt));
+
+  const ok = multisetEqual(userDKeys, ansDKeys) && multisetEqual(userCKeys, ansCKeys);
+  return {ok, status: ok ? "正解" : "不正解"};
+}
+
+function answerText(q){
+  const d = q.ans.debit.map(([a,amt]) => `${a} ${fmtComma(amt)}`).join(" / ");
+  const c = q.ans.credit.map(([a,amt]) => `${a} ${fmtComma(amt)}`).join(" / ");
+  return `借方: ${d}　｜　貸方: ${c}`;
+}
+
+/** ---------- render ---------- **/
+const app = document.getElementById("app");
 
 function render(){
-  const app = document.getElementById("app");
-  const byLevel = { "易":[], "中":[], "難":[] };
-  problems.forEach(p => byLevel[p.level].push(p));
+  app.innerHTML = "";
 
-  let html = "";
-  ["易","中","難"].forEach(level => {
-    html += `<h2>${level}</h2>`;
-    byLevel[level].forEach((p, idx) => {
-      const qid = `${level}-${p.no}`;
-      html += `
-        <div class="question" data-qid="${qid}">
-          <div class="qhead">
-            <div class="level">【${level}${p.no}】</div>
-            <div class="status na">未採点</div>
-          </div>
-          <div class="qtext">${p.text}</div>
-          ${uiHTML(qid)}
-          <details class="explain">
-            <summary>解説・正答例</summary>
-            <div class="exbox">
-              <div>${p.explain}</div>
-              <hr>
-              <div><strong>正答例（順不同）</strong></div>
-              <div class="ansline">${formatAnswer(p.answer)}</div>
-            </div>
-          </details>
-        </div>
-      `;
+  SET_A.forEach(q => {
+    const card = document.createElement("div");
+    card.className = "q";
+    card.dataset.qid = q.id;
+
+    const head = document.createElement("div");
+    head.className = "qhead";
+    head.innerHTML = `
+      <div>
+        <div class="qid">【${q.id}】</div>
+      </div>
+      <div class="diff">${q.diff}</div>
+    `;
+
+    const qtext = document.createElement("div");
+    qtext.className = "qtext";
+    qtext.textContent = q.q;
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    const opts = [BLANK, ...q.choices];
+
+    const debit = document.createElement("div");
+    debit.className = "side";
+    debit.innerHTML = `<h3>借方（左）</h3>`;
+    const debitRows = document.createElement("div");
+    debitRows.className = "rows debitRows";
+    for(let i=0;i<3;i++){
+      const row = document.createElement("div");
+      row.className = "row";
+      row.appendChild(buildRowSelect(opts));
+      row.appendChild(buildAmountInput());
+      debitRows.appendChild(row);
+    }
+    debit.appendChild(debitRows);
+
+    const credit = document.createElement("div");
+    credit.className = "side";
+    credit.innerHTML = `<h3>貸方（右）</h3>`;
+    const creditRows = document.createElement("div");
+    creditRows.className = "rows creditRows";
+    for(let i=0;i<3;i++){
+      const row = document.createElement("div");
+      row.className = "row";
+      row.appendChild(buildRowSelect(opts));
+      row.appendChild(buildAmountInput());
+      creditRows.appendChild(row);
+    }
+    credit.appendChild(creditRows);
+
+    grid.appendChild(debit);
+    grid.appendChild(credit);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = "※行順は不問（組み合わせ一致）。未選択行は無視されます。";
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const btn = document.createElement("button");
+    btn.textContent = "この1問を採点";
+    const res = document.createElement("span");
+    res.className = "result";
+
+    btn.addEventListener("click", () => {
+      const g = gradeQuestion(q, card);
+      res.textContent = g.status;
+      res.classList.remove("ok","ng");
+      res.classList.add(g.ok ? "ok" : "ng");
+
+      // open details after grading (学習として見やすい)
+      card.querySelector("details").open = true;
     });
-  });
 
-  app.innerHTML = html;
+    actions.appendChild(btn);
+    actions.appendChild(res);
 
-  // ホイールで数値が変わる誤操作を抑制（フォーカス中は無効化）
-  document.querySelectorAll("input.amount").forEach(inp => {
-    inp.addEventListener("wheel", (e) => {
-      // フォーカスされているときは数値が変わりやすいので止める
-      e.preventDefault();
-    }, { passive:false });
-  });
-}
+    const det = document.createElement("details");
+    const sum = document.createElement("summary");
+    sum.textContent = "解答・解説を見る";
+    const exp = document.createElement("div");
+    exp.className = "exp";
+    exp.textContent = q.exp;
 
-function formatAnswer(ans){
-  const d = ans.debit.map(([a,m]) => `借:${a} ${m.toLocaleString()}`).join(" / ");
-  const c = ans.credit.map(([a,m]) => `貸:${a} ${m.toLocaleString()}`).join(" / ");
-  return `${d} ｜ ${c}`;
-}
+    const ansbox = document.createElement("div");
+    ansbox.className = "ansbox";
+    ansbox.innerHTML = `正答：<code>${answerText(q)}</code>`;
 
-/** ===== 採点（集合一致） ===== */
-function makeKeysFromAnswer(ans){
-  const keys = [];
-  ans.debit.forEach(([a,m]) => keys.push(`D|${a}|${Number(m)}`));
-  ans.credit.forEach(([a,m]) => keys.push(`C|${a}|${Number(m)}`));
-  keys.sort();
-  return keys;
-}
+    det.appendChild(sum);
+    det.appendChild(exp);
+    det.appendChild(ansbox);
 
-function makeKeysFromInput(qid){
-  const keys = [];
-  ["debit","credit"].forEach(side => {
-    for(let i=0;i<MAX_ROWS;i++){
-      const sel = document.querySelector(`select[data-qid="${qid}"][data-side="${side}"][data-kind="account"]:nth-of-type(${i+1})`);
-    }
-  });
-  // nth-of-type はDOM構造的に扱いづらいので、row単位で拾う
-  const q = document.querySelector(`.question[data-qid="${qid}"]`);
-  const rows = q.querySelectorAll(`.row`);
-  rows.forEach(row => {
-    const sel = row.querySelector('select');
-    const inp = row.querySelector('input.amount');
-    const side = sel.dataset.side; // debit/credit
-    const acc = (sel.value || "").trim();
-    const amtRaw = (inp.value || "").trim();
+    card.appendChild(head);
+    card.appendChild(qtext);
+    card.appendChild(grid);
+    card.appendChild(hint);
+    card.appendChild(actions);
+    card.appendChild(det);
 
-    // 空欄行は無視（accもamtも空）
-    if(!acc && !amtRaw) return;
-
-    // 片方だけ入っている行は「不完全」としてキー化しない（採点時にNG扱い）
-    // → 後段で行をinvalid表示にする
-    if(!acc || !amtRaw) return;
-
-    const amt = Number(amtRaw);
-    if(Number.isNaN(amt)) return;
-
-    const key = `${side === "debit" ? "D" : "C"}|${acc}|${amt}`;
-    keys.push(key);
-  });
-  keys.sort();
-  return keys;
-}
-
-function markRows(qid, ok){
-  const q = document.querySelector(`.question[data-qid="${qid}"]`);
-  const rows = q.querySelectorAll(".row");
-  rows.forEach(row => {
-    row.classList.remove("valid","invalid");
-    const sel = row.querySelector('select');
-    const inp = row.querySelector('input.amount');
-    const acc = (sel.value || "").trim();
-    const amt = (inp.value || "").trim();
-
-    if(!acc && !amt) return; // 空欄は無視
-
-    // 不完全はinvalid
-    if(!acc || !amt){
-      row.classList.add("invalid");
-      return;
-    }
-
-    // 採点結果がOKなら入力行はvalid、NGならinvalid（簡易表示）
-    row.classList.add(ok ? "valid" : "invalid");
+    app.appendChild(card);
   });
 }
 
-function checkAll(){
-  let total = 0;
-  let correct = 0;
-
-  problems.forEach(p => {
-    const qid = `${p.level}-${p.no}`;
-    const qBox = document.querySelector(`.question[data-qid="${qid}"]`);
-    const status = qBox.querySelector(".status");
-    const detail = qBox.querySelector("details.explain");
-
-    total++;
-
-    const expect = makeKeysFromAnswer(p.answer);
-    const got = makeKeysFromInput(qid);
-
-    // 入力が全空（キー0）なら未入力扱い
-    // ※ただし片側だけ入力などの不完全がある場合はNGとして扱うため、行もチェック
-    const anyTyped = Array.from(qBox.querySelectorAll("select, input.amount"))
-      .some(el => (el.value || "").trim() !== "");
-
-    let ok = false;
-
-    if(!anyTyped){
-      status.textContent = "未入力";
-      status.className = "status na";
-      detail.open = false;
-      markRows(qid, false);
-      return;
-    }
-
-    ok = (JSON.stringify(expect) === JSON.stringify(got));
-
-    if(ok){
-      correct++;
-      status.textContent = "正解";
-      status.className = "status ok";
-      detail.open = false; // 正解は閉じておく（必要なら開ける）
-    }else{
-      status.textContent = "不正解";
-      status.className = "status ng";
-      detail.open = true; // 不正解は解説を自動表示
-    }
-
-    markRows(qid, ok);
-  });
-
-  const msg = `得点：${correct} / ${total}`;
-  document.getElementById("scoreTop").textContent = msg;
-  document.getElementById("scoreBottom").textContent = msg;
-}
-
-function resetAll(){
-  document.querySelectorAll("select").forEach(s => s.value = "");
-  document.querySelectorAll("input.amount").forEach(i => i.value = "");
-  document.querySelectorAll(".status").forEach(st => {
-    st.textContent = "未採点";
-    st.className = "status na";
-  });
-  document.querySelectorAll(".row").forEach(r => r.classList.remove("valid","invalid"));
-  document.querySelectorAll("details.explain").forEach(d => d.open = false);
-  document.getElementById("scoreTop").textContent = "";
-  document.getElementById("scoreBottom").textContent = "";
-}
-
-/** ===== 起動 ===== */
 render();
 
-document.getElementById("checkBtnTop").addEventListener("click", checkAll);
-document.getElementById("checkBtnBottom").addEventListener("click", checkAll);
-document.getElementById("resetBtnTop").addEventListener("click", resetAll);
-document.getElementById("resetBtnBottom").addEventListener("click", resetAll);
-</script>
+/** ---------- grade all ---------- **/
+document.getElementById("gradeAllBtn").addEventListener("click", () => {
+  let okCount = 0;
+  SET_A.forEach(q => {
+    const card = app.querySelector(`.q[data-qid="${q.id}"]`);
+    const g = gradeQuestion(q, card);
+    if (g.ok) okCount++;
+    // まとめ採点では、結果を各問に表示
+    const res = card.querySelector(".result");
+    res.textContent = g.status;
+    res.classList.remove("ok","ng");
+    res.classList.add(g.ok ? "ok" : "ng");
+  });
+  document.getElementById("score").textContent = okCount;
 
+  // ここは将来：本試験モード満点の演出（花・派手アニメ）を入れる場所
+  if (okCount === 15){
+    alert("満点！🎉（ここに花/アニメ演出を入れられます）");
+  }
+});
+</script>
 </body>
 </html>
