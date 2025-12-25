@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>日商簿記3級 第1問（仕訳）Aセット - タッチモード</title>
+  <style>
+    :root{
+      --bd:#ddd; --mut:#666; --ok:#1a7f37; --ng:#b42318;
+      --bg:#fafafa; --card:#fff; --shadow: 0 8px 18px rgba(0,0,0,.06);
+    }
+    body{font-family:system-ui,-apple-system,"Segoe UI","Hiragino Kaku Gothic ProN","Meiryo",sans-serif; margin:18px; background:var(--bg);}
+    .wrap{max-width:1100px; margin:0 auto;}
+    h1{font-size:20px; margin:0 0 6px;}
+    .sub{color:var(--mut); margin-bottom:14px; font-size:13px; line-height:1.5;}
+    .topbar{
+      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+      margin:10px 0 14px;
+    }
+    .pill{border:1px solid var(--bd); background:#fff; padding:6px 10px; border-radius:999px; font-size:13px;}
+    button{
+      padding:10px 14px; border:1px solid #999; background:#fff; border-radius:10px;
+      cursor:pointer; font-size:14px; box-shadow: none;
+    }
+    button:hover{background:#f5f5f5;}
+    button:disabled{opacity:.5; cursor:not-allowed;}
+    .card{
+      background:var(--card); border:1px solid var(--bd); border-radius:16px;
+      padding:14px; box-shadow: var(--shadow);
+    }
+    .qhead{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+    .qid{font-weight:900; font-size:18px;}
+    .diff{font-size:12px; color:#111; border:1px solid var(--bd); padding:2px 8px; border-radius:999px; background:#fff;}
+    .qtext{margin:10px 0 14px; font-size:16px; line-height:1.6;}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+    .side{
+      border:1px dashed var(--bd); border-radius:14px; padding:12px;
+      background:#fff;
+    }
+    .side h3{margin:0 0 10px; font-size:14px;}
+    .slots{display:grid; grid-template-columns:1fr; gap:8px; margin-bottom:10px;}
+    .slot{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      border:1px solid var(--bd); border-radius:12px; padding:10px;
+      min-height:44px;
+      background:#fff;
+    }
+    .slot .ph{color:#aaa;}
+    .xbtn{
+      border:1px solid var(--bd); border-radius:10px; padding:6px 10px; background:#fff; cursor:pointer;
+      font-size:13px;
+    }
+    .xbtn:hover{background:#f7f7f7;}
+    .bank{display:flex; flex-wrap:wrap; gap:8px;}
+    .accbtn{
+      border:1px solid var(--bd);
+      border-radius:999px; padding:10px 12px;
+      background:#fff; cursor:pointer;
+      font-size:14px;
+      user-select:none;
+      touch-action:manipulation;
+    }
+    .accbtn:hover{background:#f5f5f5;}
+    .accbtn.on{
+      border-color:#333;
+      background:#f0f0f0;
+      font-weight:700;
+    }
+    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:14px;}
+    .status{font-weight:800;}
+    .ok{color:var(--ok);}
+    .ng{color:var(--ng);}
+    details{margin-top:10px;}
+    summary{cursor:pointer; font-weight:800;}
+    .exp{margin-top:8px; line-height:1.7;}
+    .mut{color:var(--mut); font-size:13px;}
+
+    /* flower (perfect) */
+    .overlay{
+      position:fixed; inset:0;
+      display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.25);
+      z-index:9999;
+    }
+    .overlay.show{display:flex;}
+    .modal{
+      background:#fff; border-radius:18px; padding:18px 18px 12px;
+      border:1px solid var(--bd); width:min(520px, 92vw);
+      box-shadow: 0 16px 40px rgba(0,0,0,.20);
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .modal h2{margin:4px 0 6px; font-size:22px;}
+    .modal .mut{margin-bottom:10px;}
+    .petal{
+      position:absolute;
+      width:14px; height:10px;
+      border-radius: 14px 14px 14px 0;
+      transform: rotate(25deg);
+      opacity:.95;
+      animation: fall 1.8s linear forwards;
+    }
+    @keyframes fall{
+      0%{ transform: translateY(-40px) rotate(0deg); opacity:0; }
+      10%{opacity:1;}
+      100%{ transform: translateY(420px) rotate(360deg); opacity:0; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>日商簿記3級 第1問（仕訳）Aセット（15問） - タッチモード</h1>
+  <div class="sub">
+    目的：<b>判断スピード</b>。金額入力なし。左右の勘定科目をタップで選び、<b>採点→次へ</b>を繰り返します。<br/>
+    満点（15/15）だけ、最後に「花」が出ます。
+  </div>
+
+  <div class="topbar">
+    <div class="pill">進捗：<span id="prog">1</span> / 15</div>
+    <div class="pill">得点：<span id="score">0</span> / 15</div>
+    <div class="pill">難易度：<span id="diff">-</span></div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="resetQ">この問題をクリア</button>
+      <button id="restart">最初からやり直す</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="qhead">
+      <div class="qid">【<span id="qid">1</span>】<span class="mut"> <span id="diffInline"></span></span></div>
+      <div class="diff" id="diffBadge">-</div>
+    </div>
+
+    <div class="qtext" id="qtext">（問題文）</div>
+
+    <div class="grid">
+      <div class="side">
+        <h3>借方（左）</h3>
+        <div class="slots" id="debitSlots"></div>
+        <div class="bank" id="debitBank"></div>
+      </div>
+
+      <div class="side">
+        <h3>貸方（右）</h3>
+        <div class="slots" id="creditSlots"></div>
+        <div class="bank" id="creditBank"></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="grade">採点</button>
+      <button id="next" disabled>次へ</button>
+      <span class="status" id="status"></span>
+    </div>
+
+    <details id="details" style="display:none;">
+      <summary>解答・解説を見る</summary>
+      <div class="exp" id="exp"></div>
+      <div class="mut" id="ansHint"></div>
+    </details>
+  </div>
+</div>
+
+<!-- Perfect overlay -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal">
+    <h2>Perfect! 🌸</h2>
+    <div class="mut">15/15 正解です。すごい！</div>
+    <button id="closeOverlay">閉じる</button>
+  </div>
+</div>
+
+<script>
+/** =========================
+ * Aセット（タッチモード用）
+ *  - 採点は「勘定科目のみ」で判定（行順不問）
+ *  - 各問 choices: 6個（左右共通）
+ * ========================= **/
+const SET_A = [
+  {id:1, diff:"易", q:"現金40,000円で商品を仕入れた。",
+   choices:["現金","仕入","商品","売上","買掛金","未払金"],
+   ans:{debit:[["仕入",40000]], credit:[["現金",40000]]},
+   exp:"商品を仕入れたので左は仕入。現に金があるので右は現金。"
+  },
+  {id:2, diff:"易", q:"商品50,000円を掛けで販売した。",
+   choices:["売上","現金","売掛金","仕入","前受金","買掛金"],
+   ans:{debit:[["売掛金",50000]], credit:[["売上",50000]]},
+   exp:"現に金がない→売掛金。稼いだ記録は売上（右）。"
+  },
+  {id:3, diff:"易", q:"現金30,000円を借り入れた。",
+   choices:["現金","借入金","元入金","受取利息","支払利息","雑収入"],
+   ans:{debit:[["現金",30000]], credit:[["借入金",30000]]},
+   exp:"現金が増えた。借金も増えたので右は借入金。"
+  },
+  {id:4, diff:"易", q:"事務用品10,000円を後払いで購入した。",
+   choices:["消耗品費","現金","未払金","買掛金","備品","雑費"],
+   ans:{debit:[["消耗品費",10000]], credit:[["未払金",10000]]},
+   exp:"事務用品は費用。現に金がない→未払金。"
+  },
+  {id:5, diff:"易", q:"売掛金20,000円を現金で回収した。",
+   choices:["現金","売掛金","売上","雑収入","前受金","未収金"],
+   ans:{debit:[["現金",20000]], credit:[["売掛金",20000]]},
+   exp:"後でもらう現金（売掛金）が、現金になっただけ。"
+  },
+
+  {id:6, diff:"中", q:"商品80,000円を仕入れ、代金のうち50,000円を現金で支払い、残りは掛けとした。",
+   choices:["仕入","現金","買掛金","未払金","商品","前払金"],
+   ans:{debit:[["仕入",80000]], credit:[["現金",50000],["買掛金",30000]]},
+   exp:"商品なので仕入。現に金がない分は掛（買掛金）。"
+  },
+  {id:7, diff:"中", q:"家賃12,000円を後払いとした。",
+   choices:["支払家賃","未払金","現金","前払費用","雑費","買掛金"],
+   ans:{debit:[["支払家賃",12000]], credit:[["未払金",12000]]},
+   exp:"家賃は費用。現に金がない→未払金。"
+  },
+  {id:8, diff:"中", q:"現金過不足が5,000円の不足であることが判明した。",
+   choices:["現金","現金過不足","雑損","雑収入","売上","仕入"],
+   ans:{debit:[["現金過不足",5000]], credit:[["現金",5000]]},
+   exp:"現金が足りない→現金は右。原因不明の箱＝現金過不足。"
+  },
+  {id:9, diff:"中", q:"借入金30,000円を現金で返済した。",
+   choices:["借入金","現金","支払利息","元入金","雑費","未払金"],
+   ans:{debit:[["借入金",30000]], credit:[["現金",30000]]},
+   exp:"借金を減らしたので左は借入金。現金は出ていく。"
+  },
+  {id:10, diff:"中", q:"商品30,000円を販売し、代金は後日受け取ることとした。",
+   choices:["売掛金","売上","現金","未収金","前受金","仕入"],
+   ans:{debit:[["売掛金",30000]], credit:[["売上",30000]]},
+   exp:"販売したら売上。現に金がない→売掛金。"
+  },
+
+  {id:11, diff:"難", q:"売掛金15,000円が回収不能となった。",
+   choices:["貸倒損失","売掛金","現金","雑損","売上","現金過不足"],
+   ans:{debit:[["貸倒損失",15000]], credit:[["売掛金",15000]]},
+   exp:"取れないお金は損。損は左。売掛金（資産）を消すので右。"
+  },
+  {id:12, diff:"難", q:"備品40,000円を購入し、代金のうち20,000円を現金で支払い、残りは後払いとした。",
+   choices:["備品","現金","未払金","買掛金","消耗品費","雑費"],
+   ans:{debit:[["備品",40000]], credit:[["現金",20000],["未払金",20000]]},
+   exp:"備品は資産（左）。後払いは未払金（※買掛金ではない）。"
+  },
+  {id:13, diff:"難", q:"現金過不足5,000円について、原因が雑収入であることが判明した。",
+   choices:["現金過不足","雑収入","現金","雑損","売上","仕入"],
+   ans:{debit:[["現金過不足",5000]], credit:[["雑収入",5000]]},
+   exp:"原因が益（雑収入）と判明→益は右。現金過不足（左）を消す。"
+  },
+  {id:14, diff:"難", q:"受取手形20,000円を現金で回収した。",
+   choices:["現金","受取手形","売掛金","売上","雑収入","未収金"],
+   ans:{debit:[["現金",20000]], credit:[["受取手形",20000]]},
+   exp:"受取手形（後でもらう現金）が現金になった。"
+  },
+  {id:15, diff:"難", q:"広告費18,000円を現金で支払った。",
+   choices:["広告宣伝費","現金","未払金","前払費用","雑費","仕入"],
+   ans:{debit:[["広告宣伝費",18000]], credit:[["現金",18000]]},
+   exp:"サービスは仕入にならない。費用は左。"
+  }
+];
+
+/** ---------- タッチ判定：勘定科目のみ（行順不問・重複対応） ---------- **/
+const multisetEqual = (a, b) => {
+  if (a.length !== b.length) return false;
+  const m = new Map();
+  for (const x of a) m.set(x, (m.get(x)||0)+1);
+  for (const x of b) {
+    const v = m.get(x)||0;
+    if (v === 0) return false;
+    if (v === 1) m.delete(x); else m.set(x, v-1);
+  }
+  return m.size === 0;
+};
+const ansAccounts = (q) => ({
+  debit: q.ans.debit.map(([a,_]) => a),
+  credit: q.ans.credit.map(([a,_]) => a)
+});
+const fmtAns = (q) => {
+  const d = q.ans.debit.map(([a,amt])=> `${a} ${amt.toLocaleString()}`).join(" / ");
+  const c = q.ans.credit.map(([a,amt])=> `${a} ${amt.toLocaleString()}`).join(" / ");
+  return `正答（参考）：借方 ${d} ｜ 貸方 ${c}`;
+};
+
+/** ---------- 状態 ---------- **/
+let idx = 0;
+let score = 0;
+let graded = Array(SET_A.length).fill(false);
+let correct = Array(SET_A.length).fill(false);
+
+// 選択（最大3）
+let selD = [];
+let selC = [];
+
+/** ---------- UI refs ---------- **/
+const qid = document.getElementById("qid");
+const qtext = document.getElementById("qtext");
+const prog = document.getElementById("prog");
+const scoreEl = document.getElementById("score");
+const diff = document.getElementById("diff");
+const diffBadge = document.getElementById("diffBadge");
+const diffInline = document.getElementById("diffInline");
+
+const debitSlots = document.getElementById("debitSlots");
+const creditSlots = document.getElementById("creditSlots");
+const debitBank = document.getElementById("debitBank");
+const creditBank = document.getElementById("creditBank");
+
+const statusEl = document.getElementById("status");
+const gradeBtn = document.getElementById("grade");
+const nextBtn = document.getElementById("next");
+const resetQBtn = document.getElementById("resetQ");
+const restartBtn = document.getElementById("restart");
+
+const details = document.getElementById("details");
+const expEl = document.getElementById("exp");
+const ansHint = document.getElementById("ansHint");
+
+/** ---------- overlay ---------- **/
+const overlay = document.getElementById("overlay");
+const modal = document.getElementById("modal");
+document.getElementById("closeOverlay").addEventListener("click", () => {
+  overlay.classList.remove("show");
+  // petals cleanup
+  modal.querySelectorAll(".petal").forEach(p => p.remove());
+});
+
+/** ---------- render helpers ---------- **/
+function renderSlots(){
+  const makeSlots = (arr, side) => {
+    const host = side === "D" ? debitSlots : creditSlots;
+    host.innerHTML = "";
+    for (let i=0;i<3;i++){
+      const v = arr[i] || "";
+      const div = document.createElement("div");
+      div.className = "slot";
+      const left = document.createElement("div");
+      left.innerHTML = v ? `<b>${v}</b>` : `<span class="ph">（タップで選択）</span>`;
+      const right = document.createElement("button");
+      right.className = "xbtn";
+      right.textContent = v ? "取消" : "—";
+      right.disabled = !v;
+      right.addEventListener("click", () => {
+        if (!v) return;
+        arr.splice(i,1);
+        renderSlots();
+        renderBanks();
+        resetStatusOnly();
+      });
+      div.appendChild(left);
+      div.appendChild(right);
+      host.appendChild(div);
+    }
+  };
+  makeSlots(selD, "D");
+  makeSlots(selC, "C");
+}
+
+function renderBanks(){
+  const q = SET_A[idx];
+  const makeBtn = (acc, side) => {
+    const b = document.createElement("button");
+    b.className = "accbtn";
+    b.textContent = acc;
+
+    const arr = side === "D" ? selD : selC;
+    const on = arr.includes(acc);
+    if (on) b.classList.add("on");
+
+    b.addEventListener("click", () => {
+      // if already selected -> remove
+      const pos = arr.indexOf(acc);
+      if (pos >= 0){
+        arr.splice(pos,1);
+        renderSlots(); renderBanks(); resetStatusOnly();
+        return;
+      }
+      // add if space
+      if (arr.length >= 3) return;
+      arr.push(acc);
+      renderSlots(); renderBanks(); resetStatusOnly();
+    });
+    return b;
+  };
+
+  debitBank.innerHTML = "";
+  creditBank.innerHTML = "";
+  q.choices.forEach(acc => {
+    debitBank.appendChild(makeBtn(acc, "D"));
+    creditBank.appendChild(makeBtn(acc, "C"));
+  });
+}
+
+function resetStatusOnly(){
+  statusEl.textContent = "";
+  statusEl.className = "status";
+  details.style.display = "none";
+  nextBtn.disabled = true;
+}
+
+function renderQuestion(){
+  const q = SET_A[idx];
+  qid.textContent = q.id;
+  qtext.textContent = q.q;
+
+  prog.textContent = (idx+1);
+  scoreEl.textContent = score;
+  diff.textContent = q.diff;
+  diffBadge.textContent = q.diff;
+  diffInline.textContent = q.diff;
+
+  selD = [];
+  selC = [];
+  renderSlots();
+  renderBanks();
+
+  // already graded?
+  statusEl.textContent = "";
+  statusEl.className = "status";
+  if (graded[idx]){
+    statusEl.textContent = correct[idx] ? "正解（採点済）" : "不正解（採点済）";
+    statusEl.classList.add(correct[idx] ? "ok":"ng");
+    nextBtn.disabled = false;
+    // show explanation (学習用としては見せてOK)
+    details.style.display = "block";
+    expEl.textContent = q.exp;
+    ansHint.textContent = fmtAns(q);
+  } else {
+    details.style.display = "none";
+    nextBtn.disabled = true;
+  }
+}
+
+function gradeCurrent(){
+  const q = SET_A[idx];
+  const ans = ansAccounts(q);
+
+  // 未選択が残ってたら採点不可にする（体験をスムーズに）
+  // ※答えが2行のときもあるので「選びすぎ」は不正解に含める
+  const ok = multisetEqual(selD, ans.debit) && multisetEqual(selC, ans.credit);
+
+  if (!graded[idx]){
+    graded[idx] = true;
+    correct[idx] = ok;
+    if (ok) score++;
+  }
+
+  statusEl.textContent = ok ? "正解" : "不正解";
+  statusEl.className = "status " + (ok ? "ok":"ng");
+  scoreEl.textContent = score;
+
+  // 解説表示（タッチでも見せる：先生の方針）
+  details.style.display = "block";
+  expEl.textContent = q.exp;
+  ansHint.textContent = fmtAns(q);
+
+  nextBtn.disabled = false;
+
+  // 最後の問題で、全問採点済みならPerfect判定
+  if (idx === SET_A.length - 1){
+    const allDone = graded.every(Boolean);
+    if (allDone && score === 15){
+      showPerfect();
+    }
+  }
+}
+
+function showPerfect(){
+  overlay.classList.add("show");
+  // petals
+  for (let i=0;i<42;i++){
+    const p = document.createElement("div");
+    p.className = "petal";
+    p.style.left = (Math.random()*100) + "%";
+    p.style.top = (-30 - Math.random()*120) + "px";
+    p.style.animationDelay = (Math.random()*0.25) + "s";
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    // no hard-coded colors? -> use default; still need a color, but minimal:
+    // using varied opacity with neutral pink-ish is okay for effect; if you prefer, I can remove variation.
+    p.style.background = `rgba(255, 182, 193, ${0.75 + Math.random()*0.2})`;
+    modal.appendChild(p);
+    setTimeout(()=>p.remove(), 2200);
+  }
+}
+
+/** ---------- events ---------- **/
+gradeBtn.addEventListener("click", gradeCurrent);
+
+nextBtn.addEventListener("click", () => {
+  if (idx < SET_A.length - 1){
+    idx++;
+    renderQuestion();
+  } else {
+    // end
+    if (score === 15) showPerfect();
+    else alert(`終了：${score}/15（満点でもう一度！）`);
+  }
+});
+
+resetQBtn.addEventListener("click", () => {
+  // その問題の選択だけクリア（採点前提）
+  selD = [];
+  selC = [];
+  renderSlots(); renderBanks(); resetStatusOnly();
+});
+
+restartBtn.addEventListener("click", () => {
+  idx = 0;
+  score = 0;
+  graded = Array(SET_A.length).fill(false);
+  correct = Array(SET_A.length).fill(false);
+  renderQuestion();
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
